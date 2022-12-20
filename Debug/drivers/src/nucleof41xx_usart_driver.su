@@ -1,0 +1,10 @@
+nucleof41xx_usart_driver.c:32:6:USART_PeriClockControl	16	static
+nucleof41xx_usart_driver.c:95:6:USART_Init	24	static
+nucleof41xx_usart_driver.c:208:6:USART_DeInit	16	static
+nucleof41xx_usart_driver.c:233:6:USART_SendData	32	static
+nucleof41xx_usart_driver.c:294:6:USART_ReveiveData	32	static
+nucleof41xx_usart_driver.c:378:9:USART_SendDataIT	32	static
+nucleof41xx_usart_driver.c:413:9:USART_ReveiveDataIT	32	static
+nucleof41xx_usart_driver.c:455:6:USART_IRQInterruptConfig	16	static
+nucleof41xx_usart_driver.c:481:6:USART_IRQHandling	32	static
+nucleof41xx_usart_driver.c:793:6:USART_SetBaudRate	40	static

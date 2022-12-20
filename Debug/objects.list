@@ -1,0 +1,7 @@
+"Src/04spi_tx_arduino.o"
+"Startup/startup_stm32f411retx.o"
+"drivers/src/nucleof41xx_gpio_driver.o"
+"drivers/src/nucleof41xx_i2c_driver.o"
+"drivers/src/nucleof41xx_rcc_driver.o"
+"drivers/src/nucleof41xx_spi_driver.o"
+"drivers/src/nucleof41xx_usart_driver.o"
