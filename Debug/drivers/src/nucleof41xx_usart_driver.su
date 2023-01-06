@@ -7,4 +7,4 @@ nucleof41xx_usart_driver.c:378:9:USART_SendDataIT	32	static
 nucleof41xx_usart_driver.c:413:9:USART_ReveiveDataIT	32	static
 nucleof41xx_usart_driver.c:455:6:USART_IRQInterruptConfig	16	static
 nucleof41xx_usart_driver.c:481:6:USART_IRQHandling	32	static
-nucleof41xx_usart_driver.c:793:6:USART_SetBaudRate	40	static
+nucleof41xx_usart_driver.c:794:6:USART_SetBaudRate	40	static

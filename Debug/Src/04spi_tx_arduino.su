@@ -1,5 +1,0 @@
-04spi_tx_arduino.c:14:6:delay	16	static
-04spi_tx_arduino.c:37:6:SPI2_GPIOInits	24	static
-04spi_tx_arduino.c:68:6:SPI2_Inits	32	static
-04spi_tx_arduino.c:85:6:GPIO_ButtonInit	24	static
-04spi_tx_arduino.c:101:5:main	40	static

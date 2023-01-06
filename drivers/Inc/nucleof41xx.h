@@ -385,14 +385,14 @@ typedef struct
 
 /*
  * Macros to reset SPIx peripheral
- *
+ */
 
 #define SPI1_PCLK_EN()		(RCC->APB2ENR |= (1 << 12))
 #define SPI2_PCLK_EN()		(RCC->APB1ENR |= (1 << 14))
 #define SPI3_PCLK_EN()		(RCC->APB1ENR |= (1 << 15))
 #define SPI4_PCLK_EN()		(RCC->APB2ENR |= (1 << 13))
 #define SPI5_PCLK_EN()		(RCC->APB2ENR |= (1 << 20))
-*/
+
 
 /*
  * Returns the port code for given GPIOx base address

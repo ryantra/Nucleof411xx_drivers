@@ -381,7 +381,7 @@ uint8_t USART_SendDataIT(USART_Handle_t *pUSARTHandle, uint8_t *pTxBuffer, uint3
 
 	if(txstate != USART_BUSY_IN_TX)
 	{
-		pUSARTHandle->TxLen = Len;
+		pUSARTHandle->TxLen = (uint32_t*)Len;
 		pUSARTHandle->pTxBuffer = pTxBuffer;
 		pUSARTHandle->TxBusyState = USART_BUSY_IN_TX;
 
@@ -416,7 +416,7 @@ uint8_t USART_ReveiveDataIT(USART_Handle_t *pUSARTHandle, uint8_t *pRxBuffer, ui
 
 	if(rxstate != USART_BUSY_IN_RX)
 	{
-		pUSARTHandle->RxLen = Len;
+		pUSARTHandle->RxLen = (uint32_t *)Len;
 		pUSARTHandle->pRxBuffer = pRxBuffer;
 		pUSARTHandle->RxBusyState = USART_BUSY_IN_RX;
 
@@ -517,7 +517,7 @@ void USART_IRQHandling(USART_Handle_t *pUSARTHandle)
 				pUSARTHandle->TxLen = 0;
 
 				//Call the application call back with event USART_EVENT_TX_CMPLT
-				USART_ApplicationEventCallback(pUSARTHandle,USART_EVENT_TX_CPMLT);
+				USART_ApplicationEventCallBack(pUSARTHandle,USART_EVENT_TX_CPMLT);
 			}
 		}
 	}
@@ -587,7 +587,7 @@ void USART_IRQHandling(USART_Handle_t *pUSARTHandle)
 			{
 				//TxLen is zero
 				//Implement the code to clear the TXEIE bit (disable interrupt for TXE flag )
-				pUSARTHandle->pUSARTx->CR1 &= (1 << USART_CR1_TXEIE);
+				pUSARTHandle->pUSARTx->CR1 &= ~(1 << USART_CR1_TXEIE);
 			}
 		}
 	}
@@ -676,7 +676,8 @@ void USART_IRQHandling(USART_Handle_t *pUSARTHandle)
 				//disable the rxne
 				pUSARTHandle->pUSARTx->CR1 &= ~( 1 << USART_CR1_RXNEIE );
 				pUSARTHandle->RxBusyState = USART_READY;
-				USART_ApplicationEventCallback(pUSARTHandle,USART_EVENT_RX_CPMLT);
+				USART_ApplicationEventCallBack(pUSARTHandle,USART_EVENT_RX_CPMLT);
+
 			}
 		}
 	}
@@ -701,7 +702,7 @@ void USART_IRQHandling(USART_Handle_t *pUSARTHandle)
 		pUSARTHandle->pUSARTx->SR &= ~(1 << USART_SR_CTS);
 
 		//this interrupt is because of cts
-		USART_ApplicationEventCallback(pUSARTHandle,USART_EVENT_CTS);
+		USART_ApplicationEventCallBack(pUSARTHandle,USART_EVENT_CTS);
 	}
 
 /*************************Check for IDLE detection flag ********************************************/
@@ -710,7 +711,7 @@ void USART_IRQHandling(USART_Handle_t *pUSARTHandle)
 	temp1 = pUSARTHandle->pUSARTx->SR & ( 1 << USART_SR_IDLE);
 
 	//Implement the code to check the state of IDLEIE bit in CR1
-	temp2 = pUSARTHandle->pUSARTx->CR3 & ( 1 << USART_CR3_CTSE);
+	temp2 = pUSARTHandle->pUSARTx->CR1 & ( 1 << USART_CR1_IDLEIE);
 
 
 	if(temp1 && temp2)
@@ -719,16 +720,16 @@ void USART_IRQHandling(USART_Handle_t *pUSARTHandle)
 		temp1 = pUSARTHandle->pUSARTx->SR &= ~( 1 << USART_SR_IDLE);
 
 		//this interrupt is because of idle
-		USART_ApplicationEventCallback(pUSARTHandle,USART_EVENT_IDLE);
+		USART_ApplicationEventCallBack(pUSARTHandle,USART_EVENT_IDLE);
 	}
 
 /*************************Check for Overrun detection flag ********************************************/
 
 	//Implement the code to check the status of ORE flag  in the SR
-	temp1 = pUSARTHandle->pUSARTx->SR & (1 << USART_SR_ORE);
+	temp1 = pUSARTHandle->pUSARTx->SR & USART_SR_ORE;
 
 	//Implement the code to check the status of RXNEIE  bit in the CR1
-	temp2 = pUSARTHandle->pUSARTx->CR1 & (1 <<USART_CR1_RXNEIE);
+	temp2 = pUSARTHandle->pUSARTx->CR1 & USART_CR1_RXNEIE;
 
 
 	if(temp1  && temp2 )
@@ -736,7 +737,7 @@ void USART_IRQHandling(USART_Handle_t *pUSARTHandle)
 		//Need not to clear the ORE flag here, instead give an api for the application to clear the ORE flag .
 
 		//this interrupt is because of Overrun error
-		USART_ApplicationEventCallback(pUSARTHandle,USART_ERR_ORE);
+		USART_ApplicationEventCallBack(pUSARTHandle,USART_ERR_ORE);
 	}
 
 
@@ -759,7 +760,7 @@ void USART_IRQHandling(USART_Handle_t *pUSARTHandle)
 				is detected. It is cleared by a software sequence (an read to the USART_SR register
 				followed by a read to the USART_DR register).
 			*/
-			USART_ApplicationEventCallback(pUSARTHandle,USART_ERR_FE);
+			USART_ApplicationEventCallBack(pUSARTHandle,USART_ERR_FE);
 		}
 
 		if(temp1 & ( 1 << USART_SR_NE) )
@@ -769,12 +770,12 @@ void USART_IRQHandling(USART_Handle_t *pUSARTHandle)
 				software sequence (an read to the USART_SR register followed by a read to the
 				USART_DR register).
 			*/
-			USART_ApplicationEventCallback(pUSARTHandle,USART_ERR_NE);
+			USART_ApplicationEventCallBack(pUSARTHandle,USART_ERR_NE);
 		}
 
 		if(temp1 & ( 1 << USART_SR_ORE) )
 		{
-			USART_ApplicationEventCallback(pUSARTHandle,USART_ERR_ORE);
+			USART_ApplicationEventCallBack(pUSARTHandle,USART_ERR_ORE);
 		}
 	}
 

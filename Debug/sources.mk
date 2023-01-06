@@ -21,6 +21,7 @@ OBJCOPY_BIN :=
 SUBDIRS := \
 Src \
 Startup \
+bsp \
 drivers/Inc \
 drivers/src \
 
